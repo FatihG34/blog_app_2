@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for post in object_list %}
+    {{post.title}}
+    {{post.content|truncatechars:50}}
+    <img width='200' src="{{post.image.url}}" alt="">
+{% endfor %}
+    
+
+{% endblock content %}
