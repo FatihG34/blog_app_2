@@ -1,12 +1,10 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
+{% extends 'base.html' %} 
+{% block content %} 
 {% for post in object_list %}
-    {{post.title}}
-    {{post.content|truncatechars:50}}
-    <img width='200' src="{{post.image.url}}" alt="">
-{% endfor %}
-    
-
+    <a href="{% url 'blog:detail' post.slug %} ">
+        <h1>{{post.title}}</h1>
+    </a>
+    <img width="200" src="{{post.image.url}}" alt="{{post.title}}" />
+    <p>{{post.content|truncatechars:50}}</p>
+{% endfor %} 
 {% endblock content %}
