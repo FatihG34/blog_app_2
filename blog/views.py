@@ -5,7 +5,7 @@ from blog.models import Post
 
 # Create your views here.
 def post_list(request):
-    qs = Post.objects.all()
+    qs = Post.objects.filter(status='published')
     context = {
         'object_list':qs
     }
