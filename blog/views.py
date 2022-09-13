@@ -1,6 +1,6 @@
 from urllib import request
 from django.shortcuts import render, redirect
-from .forms import PostForm
+from .forms import CommentForm, PostForm
 from blog.models import Post
 from django.shortcuts import get_object_or_404
 
@@ -28,9 +28,17 @@ def post_create(request):
 
 def post_detail(request,slug):
     # obj = get_object_or_404(Post, slug=slug)
+    form = CommentForm(request.POST or None)
     obj = Post.objects.get(slug=slug)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post = obj
+        comment.save()
+        return redirect('blog:detail', slug=slug)
     context = {
-        "object": obj
+        "object": obj,
+        "form": form
     }
     return render(request, "blog/post_detail.html", context)
 

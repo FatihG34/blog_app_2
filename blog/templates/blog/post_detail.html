@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{object.title}}</h1>
-<img src="{{object.image.url}} " alt="{{object.title}}">
-<p>{{object.content}}</p>
+<div class="container">
+    <h1>{{object.title}}</h1>
+    <img src="{{object.image.url}} " alt="{{object.title}}">
+    <p>{{object.content}}</p>
+    <div class="contianer">
+        <form action="" method='post'>
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Comment">
+        </form>
+        
+        {% for comment in object.comments %}
+        <div class="container border-bottom border-2 my-3">
+            <h5>Comment by {{comment.user}} at {{comment.time_stamp|timesince}} ago</h5>
+            <p>{{comment.content}}</p>
+        </div>
+        {% endfor %}
+            
+    </div>
+</div>
+
 {% endblock content %}
