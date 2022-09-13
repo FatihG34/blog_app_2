@@ -1,16 +1,19 @@
 from urllib import request
 from django.shortcuts import render, redirect
 from .forms import CommentForm, PostForm
-from blog.models import Post
+from blog.models import Like, Post
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
+
+
 def post_list(request):
     qs = Post.objects.filter(status='published')
     context = {
-        'object_list':qs
+        'object_list': qs
     }
     return render(request, 'blog/post_list.html', context)
+
 
 def post_create(request):
     form = PostForm()
@@ -22,11 +25,12 @@ def post_create(request):
             post.save()
             return redirect('blog:list')
     context = {
-        'form':form
+        'form': form
     }
-    return render(request, 'blog/post_create.html',context)
+    return render(request, 'blog/post_create.html', context)
 
-def post_detail(request,slug):
+
+def post_detail(request, slug):
     # obj = get_object_or_404(Post, slug=slug)
     form = CommentForm(request.POST or None)
     obj = Post.objects.get(slug=slug)
@@ -42,6 +46,7 @@ def post_detail(request,slug):
     }
     return render(request, "blog/post_detail.html", context)
 
+
 def post_update(request, slug):
     obj = Post.objects.get(slug=slug)
     form = PostForm(request.POST or None, request.FILES or None, instance=obj)
@@ -54,12 +59,24 @@ def post_update(request, slug):
     }
     return render(request, "blog/post_update.html", context)
 
+
 def post_delete(request, slug):
     obj = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
         obj.delete()
         return redirect('blog:list')
-    context ={
-        'object':obj
+    context = {
+        'object': obj
     }
     return render(request, "blog/post_delete.html", context)
+
+
+def like(request, slug):
+    if request.method == 'POST':
+        obj = get_object_or_404(Post, slug=slug)
+        like_qs = Like.objects.filter(user=request.user, post=obj)
+        if like_qs.exists():
+            like_qs[0].delete()
+        else:
+            Like.objects.create(user=request.user, post=obj)
+        return redirect('blog:detail', slug=slug)
