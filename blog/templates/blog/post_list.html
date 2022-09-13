@@ -1,10 +1,25 @@
 {% extends 'base.html' %} 
 {% block content %} 
-{% for post in object_list %}
-    <a href="{% url 'blog:detail' post.slug %} ">
-        <h1>{{post.title}}</h1>
-    </a>
-    <img width="200" src="{{post.image.url}}" alt="{{post.title}}" />
-    <p>{{post.content|truncatechars:50}}</p>
-{% endfor %} 
+<div class="row mt-5">
+    {% for post in object_list %}
+    <div class="col-4">
+        <div class="card shadow p-3 mb-5 bg-info rounded" style="width: 18rem; height: 25rem;">
+            <img src="{{post.image.url}}" class="card-img-top" alt="{{post.title}}">
+            <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'blog:detail' post.slug %} ">{{post.title}}</a></h5>
+            <p class="card-text">{{post.content|truncatechars:50}}</p>
+            <div>
+                <i class="fa-solid fa-eye mx-2"></i><span>{{post.view_count}}</span>
+                <i class="fa-regular fa-heart mx-2"></i><span> {{post.like_count}}</span>
+                <i class="fa-regular fa-message mx-2"></i><span>{{post.comment_count}}</span>
+            </div>
+            <div class="card-text">
+                <small>Posted {{post.published_date|timesince}} ago</small>
+            </div>
+        </div>
+       
+    </div>
+</div>
+    {% endfor %} 
+</div>
 {% endblock content %}
