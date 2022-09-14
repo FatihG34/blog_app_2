@@ -23,7 +23,14 @@
             <input type="hidden" name="user">
             <button type='submit'>Like</button> {{object.like_count}}
         </form>
+        <div class="container m-3">
+            {% if user.id == object.author.id %}
+            <a href="{% url 'blog:update' object.slug %}" class="btn btn-warning mx-4">Update</a>
+            <a href="{% url 'blog:delete' object.slug %}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </div>
             
+
     </div>
 </div>
 
